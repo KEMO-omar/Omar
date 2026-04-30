@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMAR | The 2026 Tribute</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --neon: #00f2ff;
+            --purple: #7000ff;
+            --gold: #fbbf24;
+            --bg: #020205;
+        }
+
+        body {
+            margin: 0; background: var(--bg); color: white;
+            font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden;
+            scroll-behavior: smooth; cursor: none; /* عشان Cursor Trail اللي هنعمله */
+        }
+
+        /* Cursor Trail */
+        .cursor { width: 10px; height: 10px; background: var(--neon); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.1s; box-shadow: 0 0 15px var(--neon); }
+
+        /* Hero Background */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #110033 0%, #020205 100%);
+            position: relative; overflow: hidden;
+        }
+
+        .hero::after {
+            content: ''; position: absolute; width: 200%; height: 200%;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            animation: move-bg 50s linear infinite; opacity: 0.3;
+        }
+
+        @keyframes move-bg { from { transform: translate(0,0); } to { transform: translate(-50%, -50%); } }
+
+        .glitch-name {
+            font-size: 6rem; font-weight: 900; position: relative; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 10px;
+            color: white; text-shadow: 2px 2px var(--purple), -2px -2px var(--neon);
+        }
+
+        .glitch-name:hover { animation: glitch 0.3s infinite; }
+
+        @keyframes glitch {
+            0% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: flex; gap: 50px; margin-top: 50px;
+        }
+
+        .stat-box { text-align: center; border: 1px solid #333; padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+        .stat-box h3 { color: var(--gold); font-size: 2.5rem; margin: 0; }
+
+        /* Story Grid */
+        .story-grid {
+            max-width: 1400px; margin: 100px auto; display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; padding: 20px;
+        }
+
+        .story-card {
+            position: relative; height: 500px; border-radius: 25px; overflow: hidden;
+            transform-style: preserve-3d; transition: 0.6s; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .story-card:hover { transform: scale(1.03) rotateY(5deg); border-color: var(--neon); }
+
+        .story-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        .overlay {
+            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; opacity: 0; transition: 0.4s;
+        }
+
+        .story-card:hover .overlay { opacity: 1; }
+
+        /* Video Section */
+        .masterpiece {
+            padding: 100px 20px; text-align: center; background: #05050a;
+        }
+
+        .video-wrapper {
+            max-width: 1000px; margin: 0 auto; position: relative;
+            border: 5px solid #111; border-radius: 30px; overflow: hidden;
+            box-shadow: 0 0 100px rgba(112, 0, 255, 0.2);
+        }
+
+        /* Quote Section */
+        .quotes {
+            height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-style: italic; font-size: 2rem; color: #888; text-align: center; padding: 40px;
+        }
+
+        .btn-celebrate {
+            background: linear-gradient(45deg, var(--purple), var(--neon));
+            border: none; padding: 20px 50px; color: white; font-size: 1.5rem;
+            font-weight: bold; border-radius: 50px; cursor: pointer;
+            margin-top: 50px; transition: 0.3s; box-shadow: 0 0 20px var(--purple);
+        }
+
+        .btn-celebrate:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--neon); }
+
+    </style>
+</head>
+<body>
+
+    <div class="cursor"></div>
+
+    <section class="hero">
+        <p data-aos="fade-down">Welcome to the Dimension of</p>
+        <h1 class="glitch-name" onclick="makeExplosion()">عمر سمير</h1>
+        <div class="date-badge" style="font-size: 2rem; color: var(--gold); border: 2px solid; padding: 10px 30px; margin-top: 20px;">30 . 04</div>
+        
+        <div class="stats-container">
+            <div class="stat-box" data-aos="fade-up" data-aos-delay="200"><h3>14</h3><p>سنة من الجدعنة</p></div>
+            <div class="stat-box" data-aos="fade-up" data-aos-delay="400"><h3>∞</h3><p>طموح وذكاء</p></div>
+            <div class="stat-box" data-aos="fade-up" data-aos-delay="600"><h3>100%</h3><p>أخويا السند</p></div>
+        </div>
+    </section>
+
+    <section class="quotes" data-aos="zoom-in">
+        <p>"هناك أشخاص يمرون في حياتنا، وهناك عمر سمير الذي يصنع الحياة في كل مكان يتواجد فيه."</p>
+        <p style="font-size: 1rem; margin-top: 20px; color: var(--neon);">— رحلة من 2012 وحتى اليوم</p>
+    </section>
+
+    <div class="story-grid" id="mainGallery">
+        </div>
+
+    <section class="masterpiece">
+        <h2 style="font-size: 3rem; margin-bottom: 50px; color: var(--purple);" data-aos="fade-right">THE FINAL CHAPTER 🎬</h2>
+        <div class="video-wrapper" data-aos="zoom-in-up">
+            <video width="100%" controls poster="17.png">
+                <source src="18.mp4" type="video/mp4">
+            </video>
+        </div>
+        <button class="btn-celebrate" onclick="fireworks()">اضغط للاحتفال! 🎉</button>
+    </section>
+
+    <footer style="text-align: center; padding: 100px; color: #444;">
+        <p>Made with ❤️ by your brother Kareem</p>
+        <p style="font-size: 0.8rem;">All Rights Reserved to KÀREEM OMAR © 2026</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Cursor Trail Effect
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Create particles
+            const p = document.createElement('div');
+            p.className = 'cursor';
+            p.style.left = e.clientX + 'px';
+            p.style.top = e.clientY + 'px';
+            p.style.width = '5px'; p.style.height = '5px';
+            p.style.opacity = '0.5';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 500);
+        });
+
+        // Gallery Data
+        const captions = [
+            "الخطوات الأولى في العالم", "ضحكة طفولة بريئة", "بداية استكشاف الحياة", "أيام اللعب والشقاوة",
+            "أول حكاية نجاح", "في المدرسة.. القائد الصغير", "صانع الذكريات", "الجمال في بساطته",
+            "عزيمة لا تعرف المستحيل", "الرفيق والسند دايماً", "بداية مرحلة الشباب", "الطموح اللي بيكبر كل يوم",
+            "الجدعنة في أبهى صورها", "أنجح نسخة من عمر", "الشخص اللي بنفتخر بيه", "دايماً في العالي يا بطل", "عمر سمير 2026 - الأسطورة"
+        ];
+
+        const gallery = document.getElementById('mainGallery');
+        for(let i=1; i<=17; i++) {
+            const html = `
+                <div class="story-card" data-aos="flip-left">
+                    <img src="${i}.png" loading="lazy">
+                    <div class="overlay">
+                        <h3 style="color:var(--gold)">Stage ${i}</h3>
+                        <p>${captions[i-1]}</p>
+                    </div>
+                </div>
+            `;
+            gallery.innerHTML += html;
+        }
+
+        // Celebrations
+        function fireworks() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#00f2ff', '#7000ff', '#fbbf24']
+            });
+        }
+
+        function makeExplosion() {
+            fireworks();
+            document.body.style.animation = 'glitch 0.2s 3';
+            setTimeout(() => document.body.style.animation = '', 600);
+        }
+
+        // Auto-celebrate on end scroll
+        window.onscroll = function() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                fireworks();
+            }
+        };
+    </script>
+</body>
+</html>
+
