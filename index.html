@@ -2,20 +2,27 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMAR SAMIR | The Legend 2012</title>
-    <!-- CSS Libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OMAR | THE LEGEND 2012</title>
+    
+    <!-- Libraries -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --accent: #00d2ff;
-            --secondary: #3a7bd5;
+            --primary: #00f2ff;
+            --secondary: #7000ff;
             --gold: #ffd700;
-            --dark: #0a0a0a;
+            --dark: #050505;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -23,131 +30,123 @@
             font-family: 'Cairo', sans-serif; overflow-x: hidden;
         }
 
-        /* Hero Section */
+        /* الخلفية المتحركة */
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #110022 0%, #050505 100%);
+            z-index: -2;
+        }
+
+        /* شريط الكلام المتحرك */
+        .marquee {
+            position: fixed; top: 20%; width: 100%; overflow: hidden;
+            white-space: nowrap; font-size: 10vw; font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); z-index: -1; pointer-events: none;
+        }
+
+        /* Hero */
         .hero {
             height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
-            text-align: center; position: relative;
+            justify-content: center; align-items: center; text-align: center;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 10vw, 7rem); margin: 0;
-            background: linear-gradient(45deg, #fff, var(--accent));
+            font-size: clamp(3.5rem, 12vw, 8rem); font-weight: 900; margin: 0;
+            text-shadow: 0 0 20px var(--primary);
+            background: linear-gradient(to bottom, #fff, var(--primary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            z-index: 2;
         }
 
-        .birth-year {
-            font-size: 1.5rem; color: var(--gold); letter-spacing: 10px;
-            margin-top: 10px; font-weight: bold;
+        /* Gallery Grid */
+        .gallery-container {
+            padding: 20px; max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; perspective: 1000px;
         }
 
-        /* Floating Photos Section */
-        .floating-gallery {
-            padding: 100px 20px; display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px; max-width: 1400px; margin: 0 auto;
+        /* كارت الصورة السحري */
+        .img-card {
+            position: relative; height: 450px; border-radius: 25px;
+            cursor: pointer; transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #111; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .img-box {
-            position: relative; border-radius: 20px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #111; height: 450px;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .img-box:hover {
-            transform: scale(1.05) rotate(2deg);
-            border-color: var(--accent);
-            z-index: 10;
-        }
-
-        .img-box img {
+        .img-card img {
             width: 100%; height: 100%; object-fit: cover;
-            filter: grayscale(30%); transition: 0.5s;
+            border-radius: 25px; pointer-events: none;
         }
 
-        .img-box:hover img { filter: grayscale(0%); }
-
-        .img-label {
-            position: absolute; bottom: 0; width: 100%;
-            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
-            font-weight: bold; font-size: 1.1rem; text-align: center;
+        .img-card::before {
+            content: "إضغط هنا! ✨"; position: absolute; top: 10px; right: 10px;
+            background: rgba(0, 242, 255, 0.7); padding: 5px 15px;
+            border-radius: 50px; font-size: 0.8rem; z-index: 5;
         }
 
-        /* Message Sections */
-        .message-row {
-            min-height: 40vh; display: flex; justify-content: center;
-            align-items: center; text-align: center; padding: 50px;
-            background: rgba(255,255,255,0.02); margin: 20px 0;
+        .img-card .card-info {
+            position: absolute; bottom: 0; width: 100%; padding: 30px 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            border-radius: 0 0 25px 25px; text-align: center;
         }
 
-        .message-row h2 {
-            font-size: clamp(1.5rem, 5vw, 3rem);
-            color: var(--accent); max-width: 800px;
+        /* Messages */
+        .glow-text {
+            text-align: center; padding: 100px 20px;
+            font-size: clamp(1.5rem, 6vw, 3.5rem); font-weight: 900;
+            color: #fff; text-shadow: 0 0 15px var(--secondary);
         }
 
-        /* Final Celebration Button */
-        .final-cta {
-            padding: 100px 20px; text-align: center;
+        .final-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none; padding: 25px 50px; color: white;
+            font-size: 1.5rem; font-weight: bold; border-radius: 50px;
+            cursor: pointer; transition: 0.4s; box-shadow: 0 0 30px var(--secondary);
         }
 
-        .btn-party {
-            background: linear-gradient(45deg, var(--accent), var(--secondary));
-            border: none; padding: 25px 60px; color: white;
-            font-size: 1.8rem; border-radius: 100px; cursor: pointer;
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.4);
-            transition: 0.3s;
-        }
+        .final-btn:hover { transform: scale(1.1) rotate(2deg); }
 
-        .btn-party:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--accent); }
+        /* Animation Classes */
+        .spinning { transform: rotateY(360deg) scale(0.9); }
 
-        /* Scroll Progress Bar */
-        .progress-bar {
-            position: fixed; top: 0; left: 0; height: 5px;
-            background: var(--accent); width: 0%; z-index: 1000;
-        }
     </style>
 </head>
 <body>
 
-<div class="progress-bar" id="bar"></div>
+<div class="bg-gradient"></div>
+<div class="marquee" id="marquee">OMAR SAMIR OMAR • THE LEGEND • 2012 • OMAR SAMIR OMAR • THE LEGEND • 2012</div>
 
 <section class="hero">
-    <div id="confetti-canvas"></div>
-    <p data-aos="fade-down">The Grand Celebration of</p>
-    <h1 id="main-name">عمر سمير عمر</h1>
-    <div class="birth-year">EST. 2012</div>
-    <p style="margin-top: 20px; color: #888;">سكرول عشان تشوف الحكاية من أولها.. ✨</p>
+    <p data-aos="fade-down" style="letter-spacing: 5px;">THE ONE AND ONLY</p>
+    <h1 id="hero-title">عمر سمير</h1>
+    <div style="font-size: 2rem; color: var(--gold); font-weight: 900; margin-top: 10px;">2012</div>
+    <p style="margin-top: 30px; opacity: 0.6;">إسحب لتحت وإجهز للمفاجأة.. 👇</p>
 </section>
 
-<div class="message-row" data-aos="zoom-in">
-    <h2>"كل سنة وأنت طيب يا أغلى الناس.. سنة جديدة مليانة نجاح وفرحة يا عمر" ❤️</h2>
+<div class="glow-text" data-aos="zoom-in">
+    كل سنة وأنت "الجدع" اللي دايماً منور حياتنا 💙
 </div>
 
-<div class="floating-gallery" id="gallery">
-    <!-- الصور هيتم إنتاجها هنا بالأسماء اللي طلبتها -->
+<div class="gallery-container" id="mainGallery">
+    <!-- سيتم ملئ الصور بالـ JS -->
 </div>
 
-<div class="message-row" data-aos="fade-right">
-    <h2>"يا رب تحقق كل اللي بتتمناه وتفضل دايماً أنجح واحد في الدنيا" 🚀</h2>
+<div class="glow-text" data-aos="fade-up">
+    أحلامك بتستناك يا بطل.. ٢٠٢٦ هي سنتك! 🚀
 </div>
 
-<div class="final-cta">
-    <h2 style="margin-bottom: 40px;">وصلنا لـ 2026 وأنت لسه الأسطورة! 👑</h2>
-    <button class="btn-party" onclick="boom()">اضغط للاحتفال النهائي! 🎊</button>
+<div style="text-align: center; padding-bottom: 100px;">
+    <button class="final-btn" onclick="megaCelebration()">إضغط هنا للاحتفال الأخير! 🎉</button>
 </div>
 
-<footer style="padding: 50px; text-align: center; opacity: 0.5;">
-    <p>تم البرمجة بكل حب بواسطة كريم 💻</p>
+<footer style="text-align: center; padding: 40px; opacity: 0.3; border-top: 1px solid #222;">
+    تم البرمجة بواسطة كريم - ٢٠٢٦ ©
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({ duration: 1000, once: false });
+    AOS.init({ duration: 1000 });
 
-    // أسماء الصور كما هي بالضبط بالترتيب المطلوب
     const images = [
         "1.png", "10.png", "11.png", "12.png", "2.png", "3.png", 
         "4.png", "5.png", "6.png", "7.png", "8.png", "9.png",
@@ -159,51 +158,88 @@
         "WhatsApp Image 2026-04-30 at 7.14.48 PM.jpeg"
     ];
 
-    const gallery = document.getElementById('gallery');
+    const messages = ["أحلى ذكريات ❤️", "الأسطورة", "الجدع", "الغالي", "البطل", "سندنا 👑"];
 
-    images.forEach((imgName, index) => {
-        const box = document.createElement('div');
-        box.className = 'img-box';
-        // إضافة أنيميشن عشوائي (يطلع من اليمين أو الشمال أو تحت)
-        const anims = ['fade-up', 'fade-right', 'fade-left', 'zoom-in'];
-        box.setAttribute('data-aos', anims[Math.floor(Math.random() * anims.length)]);
+    const gallery = document.getElementById('mainGallery');
+
+    images.forEach((img, i) => {
+        const card = document.createElement('div');
+        card.className = 'img-card';
+        card.setAttribute('data-aos', i % 2 === 0 ? 'fade-right' : 'fade-left');
         
-        box.innerHTML = `
-            <img src="${imgName}" alt="Omar Memory">
-            <div class="img-label">أحلى الذكريات ❤️</div>
+        card.innerHTML = `
+            <img src="${img}" alt="Omar">
+            <div class="card-info">
+                <h3>${messages[i % messages.length]}</h3>
+            </div>
         `;
-        gallery.appendChild(box);
+
+        // تأثير الضغط (Spin)
+        card.onclick = (e) => {
+            card.classList.toggle('spinning');
+            
+            // صوت انفجار خفيف (Confetti) عند الصورة بالظبط
+            confetti({
+                particleCount: 40,
+                spread: 50,
+                origin: { 
+                    x: e.clientX / window.innerWidth, 
+                    y: e.clientY / window.innerHeight 
+                },
+                colors: ['#00f2ff', '#7000ff']
+            });
+
+            setTimeout(() => card.classList.remove('spinning'), 1000);
+        };
+
+        gallery.appendChild(card);
     });
 
-    // GSAP Scroll Progress
-    window.onscroll = () => {
-        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        let scrolled = (winScroll / height) * 100;
-        document.getElementById("bar").style.width = scrolled + "%";
-    };
+    // GSAP Marquee Animation
+    gsap.to("#marquee", {
+        xPercent: -50,
+        repeat: -1,
+        duration: 20,
+        ease: "none"
+    });
 
-    // Celebration Functions
-    function boom() {
-        const duration = 5 * 1000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    // Hero Animation
+    gsap.from("#hero-title", {
+        duration: 1.5,
+        scale: 0.5,
+        opacity: 0,
+        ease: "elastic.out(1, 0.3)"
+    });
 
-        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+    function megaCelebration() {
+        var end = Date.now() + (4 * 1000);
+        var colors = ['#00f2ff', '#7000ff', '#ffd700'];
 
-        const interval = setInterval(function() {
-            const timeLeft = animationEnd - Date.now();
-            if (timeLeft <= 0) return clearInterval(interval);
-            const particleCount = 50 * (timeLeft / duration);
-            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-        }, 250);
+        (function frame() {
+            confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: colors
+            });
+            confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: colors
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
     }
 
-    // أول ما يفتح الموقع
+    // أول ما يفتح الصفحة
     window.onload = () => {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        gsap.from("#main-name", { duration: 2, y: -100, opacity: 0, ease: "bounce" });
+        megaCelebration();
     };
 </script>
 </body>
