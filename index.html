@@ -3,218 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMAR | The 2026 Tribute</title>
+    <title>OMAR SAMIR | The Legend 2012</title>
+    <!-- CSS Libraries -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
     <style>
         :root {
-            --neon: #00f2ff;
-            --purple: #7000ff;
-            --gold: #fbbf24;
-            --bg: #020205;
+            --accent: #00d2ff;
+            --secondary: #3a7bd5;
+            --gold: #ffd700;
+            --dark: #0a0a0a;
         }
 
         body {
-            margin: 0; background: var(--bg); color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden;
-            scroll-behavior: smooth; cursor: none; /* عشان Cursor Trail اللي هنعمله */
+            margin: 0; background-color: var(--dark); color: white;
+            font-family: 'Cairo', sans-serif; overflow-x: hidden;
         }
 
-        /* Cursor Trail */
-        .cursor { width: 10px; height: 10px; background: var(--neon); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.1s; box-shadow: 0 0 15px var(--neon); }
-
-        /* Hero Background */
+        /* Hero Section */
         .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: radial-gradient(circle at center, #110033 0%, #020205 100%);
-            position: relative; overflow: hidden;
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
+            text-align: center; position: relative;
         }
 
-        .hero::after {
-            content: ''; position: absolute; width: 200%; height: 200%;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-            animation: move-bg 50s linear infinite; opacity: 0.3;
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem); margin: 0;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            z-index: 2;
         }
 
-        @keyframes move-bg { from { transform: translate(0,0); } to { transform: translate(-50%, -50%); } }
-
-        .glitch-name {
-            font-size: 6rem; font-weight: 900; position: relative; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 10px;
-            color: white; text-shadow: 2px 2px var(--purple), -2px -2px var(--neon);
+        .birth-year {
+            font-size: 1.5rem; color: var(--gold); letter-spacing: 10px;
+            margin-top: 10px; font-weight: bold;
         }
 
-        .glitch-name:hover { animation: glitch 0.3s infinite; }
-
-        @keyframes glitch {
-            0% { transform: translate(2px, 2px); }
-            50% { transform: translate(-2px, -2px); }
-            100% { transform: translate(0); }
+        /* Floating Photos Section */
+        .floating-gallery {
+            padding: 100px 20px; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px; max-width: 1400px; margin: 0 auto;
         }
 
-        /* Stats Section */
-        .stats-container {
-            display: flex; gap: 50px; margin-top: 50px;
+        .img-box {
+            position: relative; border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #111; height: 450px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .stat-box { text-align: center; border: 1px solid #333; padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
-        .stat-box h3 { color: var(--gold); font-size: 2.5rem; margin: 0; }
-
-        /* Story Grid */
-        .story-grid {
-            max-width: 1400px; margin: 100px auto; display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 40px; padding: 20px;
+        .img-box:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--accent);
+            z-index: 10;
         }
 
-        .story-card {
-            position: relative; height: 500px; border-radius: 25px; overflow: hidden;
-            transform-style: preserve-3d; transition: 0.6s; border: 1px solid rgba(255,255,255,0.1);
+        .img-box img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(30%); transition: 0.5s;
         }
 
-        .story-card:hover { transform: scale(1.03) rotateY(5deg); border-color: var(--neon); }
+        .img-box:hover img { filter: grayscale(0%); }
 
-        .story-card img { width: 100%; height: 100%; object-fit: cover; }
-
-        .overlay {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; opacity: 0; transition: 0.4s;
+        .img-label {
+            position: absolute; bottom: 0; width: 100%;
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            font-weight: bold; font-size: 1.1rem; text-align: center;
         }
 
-        .story-card:hover .overlay { opacity: 1; }
-
-        /* Video Section */
-        .masterpiece {
-            padding: 100px 20px; text-align: center; background: #05050a;
+        /* Message Sections */
+        .message-row {
+            min-height: 40vh; display: flex; justify-content: center;
+            align-items: center; text-align: center; padding: 50px;
+            background: rgba(255,255,255,0.02); margin: 20px 0;
         }
 
-        .video-wrapper {
-            max-width: 1000px; margin: 0 auto; position: relative;
-            border: 5px solid #111; border-radius: 30px; overflow: hidden;
-            box-shadow: 0 0 100px rgba(112, 0, 255, 0.2);
+        .message-row h2 {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: var(--accent); max-width: 800px;
         }
 
-        /* Quote Section */
-        .quotes {
-            height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-style: italic; font-size: 2rem; color: #888; text-align: center; padding: 40px;
+        /* Final Celebration Button */
+        .final-cta {
+            padding: 100px 20px; text-align: center;
         }
 
-        .btn-celebrate {
-            background: linear-gradient(45deg, var(--purple), var(--neon));
-            border: none; padding: 20px 50px; color: white; font-size: 1.5rem;
-            font-weight: bold; border-radius: 50px; cursor: pointer;
-            margin-top: 50px; transition: 0.3s; box-shadow: 0 0 20px var(--purple);
+        .btn-party {
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            border: none; padding: 25px 60px; color: white;
+            font-size: 1.8rem; border-radius: 100px; cursor: pointer;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.4);
+            transition: 0.3s;
         }
 
-        .btn-celebrate:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--neon); }
+        .btn-party:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--accent); }
 
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 5px;
+            background: var(--accent); width: 0%; z-index: 1000;
+        }
     </style>
 </head>
 <body>
 
-    <div class="cursor"></div>
+<div class="progress-bar" id="bar"></div>
 
-    <section class="hero">
-        <p data-aos="fade-down">Welcome to the Dimension of</p>
-        <h1 class="glitch-name" onclick="makeExplosion()">عمر سمير</h1>
-        <div class="date-badge" style="font-size: 2rem; color: var(--gold); border: 2px solid; padding: 10px 30px; margin-top: 20px;">30 . 04</div>
+<section class="hero">
+    <div id="confetti-canvas"></div>
+    <p data-aos="fade-down">The Grand Celebration of</p>
+    <h1 id="main-name">عمر سمير عمر</h1>
+    <div class="birth-year">EST. 2012</div>
+    <p style="margin-top: 20px; color: #888;">سكرول عشان تشوف الحكاية من أولها.. ✨</p>
+</section>
+
+<div class="message-row" data-aos="zoom-in">
+    <h2>"كل سنة وأنت طيب يا أغلى الناس.. سنة جديدة مليانة نجاح وفرحة يا عمر" ❤️</h2>
+</div>
+
+<div class="floating-gallery" id="gallery">
+    <!-- الصور هيتم إنتاجها هنا بالأسماء اللي طلبتها -->
+</div>
+
+<div class="message-row" data-aos="fade-right">
+    <h2>"يا رب تحقق كل اللي بتتمناه وتفضل دايماً أنجح واحد في الدنيا" 🚀</h2>
+</div>
+
+<div class="final-cta">
+    <h2 style="margin-bottom: 40px;">وصلنا لـ 2026 وأنت لسه الأسطورة! 👑</h2>
+    <button class="btn-party" onclick="boom()">اضغط للاحتفال النهائي! 🎊</button>
+</div>
+
+<footer style="padding: 50px; text-align: center; opacity: 0.5;">
+    <p>تم البرمجة بكل حب بواسطة كريم 💻</p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: false });
+
+    // أسماء الصور كما هي بالضبط بالترتيب المطلوب
+    const images = [
+        "1.png", "10.png", "11.png", "12.png", "2.png", "3.png", 
+        "4.png", "5.png", "6.png", "7.png", "8.png", "9.png",
+        "WhatsApp Image 2026-04-30 at 10.47.02 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 10.47.03 PM (1).jpeg",
+        "WhatsApp Image 2026-04-30 at 10.47.03 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 2.45.52 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 7.03.39 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 7.14.48 PM.jpeg"
+    ];
+
+    const gallery = document.getElementById('gallery');
+
+    images.forEach((imgName, index) => {
+        const box = document.createElement('div');
+        box.className = 'img-box';
+        // إضافة أنيميشن عشوائي (يطلع من اليمين أو الشمال أو تحت)
+        const anims = ['fade-up', 'fade-right', 'fade-left', 'zoom-in'];
+        box.setAttribute('data-aos', anims[Math.floor(Math.random() * anims.length)]);
         
-        <div class="stats-container">
-            <div class="stat-box" data-aos="fade-up" data-aos-delay="200"><h3>14</h3><p>سنة من الجدعنة</p></div>
-            <div class="stat-box" data-aos="fade-up" data-aos-delay="400"><h3>∞</h3><p>طموح وذكاء</p></div>
-            <div class="stat-box" data-aos="fade-up" data-aos-delay="600"><h3>100%</h3><p>أخويا السند</p></div>
-        </div>
-    </section>
+        box.innerHTML = `
+            <img src="${imgName}" alt="Omar Memory">
+            <div class="img-label">أحلى الذكريات ❤️</div>
+        `;
+        gallery.appendChild(box);
+    });
 
-    <section class="quotes" data-aos="zoom-in">
-        <p>"هناك أشخاص يمرون في حياتنا، وهناك عمر سمير الذي يصنع الحياة في كل مكان يتواجد فيه."</p>
-        <p style="font-size: 1rem; margin-top: 20px; color: var(--neon);">— رحلة من 2012 وحتى اليوم</p>
-    </section>
+    // GSAP Scroll Progress
+    window.onscroll = () => {
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("bar").style.width = scrolled + "%";
+    };
 
-    <div class="story-grid" id="mainGallery">
-        </div>
+    // Celebration Functions
+    function boom() {
+        const duration = 5 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-    <section class="masterpiece">
-        <h2 style="font-size: 3rem; margin-bottom: 50px; color: var(--purple);" data-aos="fade-right">THE FINAL CHAPTER 🎬</h2>
-        <div class="video-wrapper" data-aos="zoom-in-up">
-            <video width="100%" controls poster="17.png">
-                <source src="18.mp4" type="video/mp4">
-            </video>
-        </div>
-        <button class="btn-celebrate" onclick="fireworks()">اضغط للاحتفال! 🎉</button>
-    </section>
+        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
-    <footer style="text-align: center; padding: 100px; color: #444;">
-        <p>Made with ❤️ by your brother Kareem</p>
-        <p style="font-size: 0.8rem;">All Rights Reserved to KÀREEM OMAR © 2026</p>
-    </footer>
+        const interval = setInterval(function() {
+            const timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) return clearInterval(interval);
+            const particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init();
-
-        // Cursor Trail Effect
-        const cursor = document.querySelector('.cursor');
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            // Create particles
-            const p = document.createElement('div');
-            p.className = 'cursor';
-            p.style.left = e.clientX + 'px';
-            p.style.top = e.clientY + 'px';
-            p.style.width = '5px'; p.style.height = '5px';
-            p.style.opacity = '0.5';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 500);
-        });
-
-        // Gallery Data
-        const captions = [
-            "الخطوات الأولى في العالم", "ضحكة طفولة بريئة", "بداية استكشاف الحياة", "أيام اللعب والشقاوة",
-            "أول حكاية نجاح", "في المدرسة.. القائد الصغير", "صانع الذكريات", "الجمال في بساطته",
-            "عزيمة لا تعرف المستحيل", "الرفيق والسند دايماً", "بداية مرحلة الشباب", "الطموح اللي بيكبر كل يوم",
-            "الجدعنة في أبهى صورها", "أنجح نسخة من عمر", "الشخص اللي بنفتخر بيه", "دايماً في العالي يا بطل", "عمر سمير 2026 - الأسطورة"
-        ];
-
-        const gallery = document.getElementById('mainGallery');
-        for(let i=1; i<=17; i++) {
-            const html = `
-                <div class="story-card" data-aos="flip-left">
-                    <img src="${i}.png" loading="lazy">
-                    <div class="overlay">
-                        <h3 style="color:var(--gold)">Stage ${i}</h3>
-                        <p>${captions[i-1]}</p>
-                    </div>
-                </div>
-            `;
-            gallery.innerHTML += html;
-        }
-
-        // Celebrations
-        function fireworks() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#00f2ff', '#7000ff', '#fbbf24']
-            });
-        }
-
-        function makeExplosion() {
-            fireworks();
-            document.body.style.animation = 'glitch 0.2s 3';
-            setTimeout(() => document.body.style.animation = '', 600);
-        }
-
-        // Auto-celebrate on end scroll
-        window.onscroll = function() {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                fireworks();
-            }
-        };
-    </script>
+    // أول ما يفتح الموقع
+    window.onload = () => {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        gsap.from("#main-name", { duration: 2, y: -100, opacity: 0, ease: "bounce" });
+    };
+</script>
 </body>
 </html>
-
