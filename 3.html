@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMAR SAMIR | The 2012 Legend</title>
+    <!-- Fonts & Animation Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --blue: #003366;
+            --dark: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0; background: var(--dark); color: #fff;
+            font-family: 'Cairo', sans-serif; overflow-x: hidden;
+        }
+
+        /* خلفية سينمائية */
+        .cinematic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 30%, #0a192f 0%, #050505 100%);
+            z-index: -1;
+        }
+
+        /* الهيدر الأسطوري */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            position: relative; overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 12vw, 8rem); font-weight: 900;
+            margin: 0; line-height: 1.1; letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 30%, var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero p { font-size: 1.5rem; color: var(--gold); letter-spacing: 5px; opacity: 0.8; }
+
+        /* حاوية الصور "العشوائية الذكية" */
+        .gallery-container {
+            position: relative; max-width: 1600px; margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        .photo-wrap {
+            position: relative; margin-bottom: 150px; display: flex;
+            justify-content: center; width: 100%;
+        }
+
+        /* عرض الصور بأبعادها الحقيقية مع لمسة احترافية */
+        .real-dim-photo {
+            max-width: 90%; height: auto; border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,215,0,0.2);
+            transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .photo-wrap:hover .real-dim-photo {
+            transform: scale(1.02); border-color: var(--gold);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+        }
+
+        /* نصوص تفاعلية بجانب الصور */
+        .floating-text {
+            position: absolute; font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 900; color: rgba(255,255,255,0.05);
+            white-space: nowrap; pointer-events: none; z-index: -1;
+        }
+
+        /* سيكشن الكلام الحلو */
+        .tribute-section {
+            padding: 150px 20px; text-align: center;
+            background: linear-gradient(transparent, var(--glass), transparent);
+        }
+
+        .tribute-section h2 {
+            font-size: 3rem; color: var(--gold); margin-bottom: 30px;
+        }
+
+        .tribute-card {
+            max-width: 800px; margin: 0 auto; font-size: 1.4rem;
+            line-height: 1.8; color: #ccc;
+        }
+
+        /* زر الانفجار الختامي */
+        .celebrate-btn {
+            background: none; border: 2px solid var(--gold);
+            color: var(--gold); padding: 20px 50px; font-size: 1.5rem;
+            cursor: pointer; transition: 0.4s; border-radius: 5px;
+            margin-top: 50px; font-weight: bold;
+        }
+
+        .celebrate-btn:hover {
+            background: var(--gold); color: #000;
+            box-shadow: 0 0 30px var(--gold);
+        }
+
+        /* Cursor Custom */
+        .custom-cursor {
+            width: 20px; height: 20px; border: 2px solid var(--gold);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transition: 0.1s linear;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="custom-cursor" id="cursor"></div>
+<div class="cinematic-bg"></div>
+
+<section class="hero">
+    <div data-aos="fade-up" data-aos-duration="2000">
+        <p>LEGENDARY JOURNEY</p>
+        <h1>عمر سمير عمر</h1>
+        <div style="font-size: 2rem; color: #fff; margin-top: 10px;">30 . 04 . 2012</div>
+    </div>
+</section>
+
+<section class="tribute-section" data-aos="zoom-in">
+    <div class="tribute-card">
+        <h2>أخويا السند وجدع الناس</h2>
+        <p>كل سنة وأنت طيب يا عمر، يا اللي دايماً منور حياتنا بضحكتك وجدعنتك.. يا رب السنة دي تكون وش السعد عليك، تحقق فيها كل أحلامك وتوصل لكل اللي بتخطط له يا بطل.</p>
+    </div>
+</section>
+
+<div class="gallery-container" id="gallery">
+    <!-- الصور هيتم توليدها برمجياً هنا -->
+</div>
+
+<section class="tribute-section" style="background: none;">
+    <div data-aos="flip-up">
+        <h2>مشوار مليان نجاح 🔥</h2>
+        <button class="celebrate-btn" onclick="fireworks()">اضغط للاحتفال النهائي 🎊</button>
+    </div>
+</section>
+
+<footer style="padding: 100px; text-align: center; border-top: 1px solid var(--glass);">
+    <p style="opacity: 0.3;">Made with Professional Excellence for OMAR © 2026</p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+    gsap.registerPlugin(ScrollTrigger);
+
+    // قائمة الصور بالأسماء اللي بعتها بالظبط
+    const images = [
+        "1.png", "10.png", "11.png", "12.png", "2.png", "3.png", 
+        "4.png", "5.png", "6.png", "7.png", "8.png", "9.png",
+        "WhatsApp Image 2026-04-30 at 10.47.02 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 10.47.03 PM (1).jpeg",
+        "WhatsApp Image 2026-04-30 at 10.47.03 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 2.45.52 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 7.03.39 PM.jpeg",
+        "WhatsApp Image 2026-04-30 at 7.14.48 PM.jpeg"
+    ];
+
+    const messages = ["الأسطورة", "الجدعنة", "السند", "الطموح", "2012", "عمر سمير"];
+    const container = document.getElementById('gallery');
+
+    // توليد الصور عشوائياً وتفاعلياً
+    images.forEach((img, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'photo-wrap';
+        
+        // نصوص خلفية عشوائية
+        const bgText = document.createElement('div');
+        bgText.className = 'floating-text';
+        bgText.innerText = messages[i % messages.length];
+        bgText.style.left = (i % 2 === 0) ? '10%' : '60%';
+        
+        wrap.innerHTML = `
+            <img src="${img}" class="real-dim-photo" data-aos="${i % 2 === 0 ? 'fade-right' : 'fade-left'}">
+        `;
+        wrap.appendChild(bgText);
+        container.appendChild(wrap);
+
+        // أنيميشن GSAP لكل صورة لجعلها "تتحرك" مع السكرول
+        gsap.to(wrap, {
+            scrollTrigger: {
+                trigger: wrap,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            },
+            y: (i % 2 === 0) ? -100 : 100, // واحدة تطلع وواحدة تنزل
+            ease: "none"
+        });
+    });
+
+    // Cursor Follow
+    document.addEventListener('mousemove', e => {
+        gsap.to("#cursor", { x: e.clientX, y: e.clientY, duration: 0.1 });
+    });
+
+    // Fireworks
+    function fireworks() {
+        const count = 200, defaults = { origin: { y: 0.7 } };
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+        }
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+    }
+
+    window.onload = () => {
+        fireworks();
+        gsap.from(".hero h1", { scale: 0.5, opacity: 0, duration: 2, ease: "expo.out" });
+    };
+</script>
+</body>
+</html>
