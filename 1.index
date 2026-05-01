@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMAR | The Bento Story</title>
+    
+    <!-- Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --bg: #030712;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            margin: 0; background: var(--bg); color: white;
+            font-family: 'Cairo', sans-serif; overflow-x: hidden;
+            cursor: none; /* لتفعيل الـ Custom Cursor */
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed; width: 40px; height: 40px;
+            background: rgba(99, 102, 241, 0.3); border: 2px solid var(--primary);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.1s ease, background 0.3s ease;
+        }
+
+        /* Background Mesh Gradient */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+            filter: blur(100px); animation: meshMove 10s ease infinite alternate;
+        }
+
+        @keyframes meshMove { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        /* 1. Hero Section */
+        .hero-section {
+            height: 100vh; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+
+        .hero-img {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; filter: blur(5px) brightness(0.4); z-index: -1;
+            transform: scale(1.1); animation: heroZoom 20s infinite alternate;
+        }
+
+        @keyframes heroZoom { to { transform: scale(1.3); } }
+
+        .hero-content h1 { font-size: clamp(3rem, 10vw, 6rem); margin: 0; font-weight: 900; }
+        .hero-content p { font-size: 1.5rem; color: var(--primary); letter-spacing: 5px; }
+
+        /* 2. Bento Grid Section */
+        .section-title { text-align: center; padding: 100px 20px 50px; font-size: 2.5rem; }
+
+        .bento-grid {
+            max-width: 1200px; margin: 0 auto; padding: 20px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 350px); gap: 20px;
+        }
+
+        .bento-item { 
+            position: relative; border-radius: 24px; overflow: hidden; 
+            perspective: 1000px; cursor: pointer;
+        }
+
+        /* 3D Flip Logic */
+        .card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s; transform-style: preserve-3d;
+        }
+
+        .bento-item:hover .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 24px;
+        }
+
+        .card-back {
+            background: var(--primary); color: white; display: flex;
+            align-items: center; justify-content: center; transform: rotateY(180deg);
+            padding: 20px; text-align: center; font-weight: bold;
+        }
+
+        .bento-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Bento Areas */
+        .photo-1 { grid-area: 1 / 1 / 3 / 3; } /* Focal Point 2x2 */
+        .photo-2 { grid-area: 1 / 3 / 2 / 4; }
+        .photo-3 { grid-area: 1 / 4 / 2 / 5; }
+        .photo-4 { grid-area: 2 / 3 / 3 / 5; }
+
+        /* 3. Minimalist Gallery (12 Photos) */
+        .mini-gallery {
+            max-width: 1200px; margin: 100px auto; padding: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;
+        }
+
+        .mini-item {
+            height: 300px; border-radius: 15px; overflow: hidden;
+            opacity: 0; transform: translateY(30px); transition: 0.6s all ease-out;
+        }
+
+        .mini-item.reveal { opacity: 1; transform: translateY(0); }
+
+        /* Pulse CTA */
+        .cta-section { text-align: center; padding: 100px 20px; }
+        .pulse-btn {
+            background: var(--accent); color: white; border: none;
+            padding: 25px 50px; font-size: 1.8rem; border-radius: 100px;
+            cursor: pointer; animation: pulse 2s infinite; font-family: 'Cairo';
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(244, 63, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .photo-1, .photo-2, .photo-3, .photo-4 { grid-area: auto; height: 350px; }
+            cursor: none; #cursor { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor">✨</div>
+    <div class="mesh-bg"></div>
+
+    <section class="hero-section">
+        <img src="1.png" class="hero-img" alt="Omar">
+        <div class="hero-content" data-aos="zoom-out">
+            <p>EST. 2012</p>
+            <h1>عمر سمير عمر</h1>
+            <div style="margin-top: 20px; font-weight: bold; color: #ccc;">30 . APRIL . 2026</div>
+        </div>
+    </section>
+
+    <h2 class="section-title" data-aos="fade-up">Core Memories (Bento Style)</h2>
+    <div class="bento-grid">
+        <div class="bento-item photo-1" data-aos="fade-right">
+            <div class="card-inner">
+                <div class="card-front"><img src="2.png"></div>
+                <div class="card-back">أنت Focal Point حياتنا يا عمر ❤️</div>
+            </div>
+        </div>
+        <div class="bento-item photo-2" data-aos="fade-down">
+            <div class="card-inner">
+                <div class="card-front"><img src="3.png"></div>
+                <div class="card-back">ذكاء وطموح 🚀</div>
+            </div>
+        </div>
+        <div class="bento-item photo-3" data-aos="fade-left">
+            <div class="card-inner">
+                <div class="card-front"><img src="4.png"></div>
+                <div class="card-back">أجدع أخ 👑</div>
+            </div>
+        </div>
+        <div class="bento-item photo-4" data-aos="fade-up">
+            <div class="card-inner">
+                <div class="card-front"><img src="5.png"></div>
+                <div class="card-back">ذكريات متتنسيش ✨</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title" data-aos="fade-up">The Collection</h2>
+    <div class="mini-gallery" id="miniGallery">
+        <!-- سيتم توليد الـ 13 صورة المتبقية هنا -->
+    </div>
+
+    <div class="cta-section">
+        <button class="pulse-btn" onclick="finalSurprise()">إضغط لرؤية المفاجأة الكبرى 🎁</button>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // 1. Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX - 20 + 'px';
+            cursor.style.top = e.clientY - 20 + 'px';
+        });
+
+        // 2. Dynamic Mini Gallery (Remaining 13 images to make total 18)
+        const miniImages = [
+            "6.png", "7.png", "8.png", "9.png", "10.png", "11.png", "12.png",
+            "WhatsApp Image 2026-04-30 at 10.47.02 PM.jpeg",
+            "WhatsApp Image 2026-04-30 at 10.47.03 PM (1).jpeg",
+            "WhatsApp Image 2026-04-30 at 10.47.03 PM.jpeg",
+            "WhatsApp Image 2026-04-30 at 2.45.52 PM.jpeg",
+            "WhatsApp Image 2026-04-30 at 7.03.39 PM.jpeg",
+            "WhatsApp Image 2026-04-30 at 7.14.48 PM.jpeg"
+        ];
+
+        const miniGallery = document.getElementById('miniGallery');
+        miniImages.forEach(img => {
+            const div = document.createElement('div');
+            div.className = 'mini-item';
+            div.innerHTML = `<img src="${img}" style="width:100%; height:100%; object-fit:cover;">`;
+            miniGallery.appendChild(div);
+        });
+
+        // 3. Intersection Observer (Reveal Effect)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.mini-item').forEach(item => observer.observe(item));
+
+        // 4. Final Surprise
+        function finalSurprise() {
+            confetti({
+                particleCount: 200,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#6366f1', '#f43f5e', '#ffd700']
+            });
+            alert("كل سنة وأنت طيب يا عمر! أنجح وأجدع واحد في الدنيا 🎂🔥");
+        }
+    </script>
+</body>
+</html>
